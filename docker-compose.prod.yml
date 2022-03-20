@@ -1,0 +1,69 @@
+version: '3.1'
+services:
+    es:
+      container_name: fitness_tracking_partner_es
+      image: elasticsearch:7.14.2
+      environment:
+        - discovery.type=single-node
+      ports:
+        - "9200:9200"
+      networks:
+        - docker-stack_dev-network
+    web:
+        container_name: app_web_api
+        build:
+            context: .
+            dockerfile: prod.Dockerfile
+        volumes:
+          - .:/code
+          - ./static-root:/static-root
+          - ./media-root:/media-root
+        command: sh -c "gunicorn app.wsgi -b 0.0.0.0:8000 --reload"
+        ports:
+          - "8001:8001"
+        env_file:
+          - .env
+        depends_on:
+          - es
+        links:
+          - es
+        networks: 
+            - docker-stack_dev-network
+        image: web-image
+        restart: on-failure
+        ports:
+            - "8000:8000"
+    
+    # celery:
+    #     image: web-image
+    #     container_name: app_celery
+    #     command: sh -c "celery -A app worker -l info"
+    #     volumes:
+    #         - .:/code
+    #     env_file:
+    #         - ./.env
+    #     networks: 
+    #         - docker-stack_dev-network
+    #     external_links:
+    #         - pg_db:db
+    #         - redis_rd:redis
+    #     restart: on-failure
+
+    # celery-beat:
+    #     image: web-image
+    #     container_name: app_celery_beat
+    #     command: sh -c "celery -A app beat -l info --scheduler django_celery_beat.schedulers:DatabaseScheduler"
+    #     volumes:
+    #         - .:/code
+    #     env_file:
+    #         - ./.env
+    #     networks: 
+    #         - docker-stack_dev-network
+    #     external_links:
+    #         - pg_db:db
+    #         - redis_rd:redis
+    #     restart: on-failure
+
+networks:
+  docker-stack_dev-network:
+      driver: bridge

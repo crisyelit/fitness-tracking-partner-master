@@ -1,0 +1,21 @@
+{% extends 'training/coach/base.html' %}
+{% load static crispy_forms_tags %}
+
+{% block body %}
+<div class="filemgr-content-header">
+    {% if object %}
+    <h4 class="mg-b-0">Editar {{object.get_full_name | capfirst}}</h4>
+    {% else %}
+    <h4 class="mg-b-0">Asignar rutina a {{customer.get_full_name | capfirst}}</h4>
+    {% endif %}
+</div><!-- filemgr-content-header -->
+<div class="filemgr-content-body">
+    <div class="pd-20 pd-lg-25 pd-xl-30">
+        {% crispy form %}
+    </div>
+</div><!-- filemgr-content-body -->
+
+{% endblock body %}
+{% block js %}
+<script src="{% static 'assets/js/dashforge.filemgr.js' %}"></script>
+{% endblock js %}

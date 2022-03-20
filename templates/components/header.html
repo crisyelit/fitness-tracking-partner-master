@@ -1,0 +1,139 @@
+{% load static %}
+
+{% url 'core:index' as home %}
+{% url 'dashboard:index' as dashboard %}
+{% url 'dashboard:training:customer_list' as customer_list %}
+
+<header class="navbar navbar-header navbar-header-fixed">
+  <a href="" id="mainMenuOpen" class="burger-menu"><i data-feather="menu"></i></a>
+  <div class="navbar-brand">
+    <a href="{{home}}" class="df-logo">
+      <img src="{% static 'assets/img/logo1.png' %}" height="65px" alt="">
+    </a>
+  </div><!-- navbar-brand -->
+  <div id="navbarMenu" class="navbar-menu-wrapper">
+    <div class="navbar-menu-header">
+      <a href="{{home}}" class="df-logo">
+        <img src="{% static 'assets/img/logo1.png' %}" height="65px" alt="">
+      </a>
+      <a id="mainMenuClose" href=""><i data-feather="x"></i></a>
+    </div><!-- navbar-menu-header -->
+
+
+
+    <ul class="nav navbar-menu">
+      {% if user.is_authenticated %}
+
+      {% if user.user_type == 'coach' %}
+      <li class="nav-item {% if request.path == dashboard %}active{% endif %}">
+        <a href="{{dashboard}}" class="nav-link">Resumen</a>
+      </li>
+      <li class="nav-item with-sub">
+        <a href="" class="nav-link">Entrenamiento</a>
+        <ul class="navbar-menu-sub">
+          <li class="nav-sub-item"><a href="{% url 'dashboard:training:exercise_list' %}" class="nav-sub-link">Ejercicios</a></li>
+          <li class="nav-sub-item"><a href="{% url 'dashboard:training:routine_list' %}" class="nav-sub-link">Rutinas</a></li>
+        </ul>
+      </li>
+      <li class="nav-item {% if request.path == dashbcustomer_listoard %}active{% endif %}">
+        <a href="{{customer_list}}" class="nav-link">Clientes</a>
+      </li>
+      {% elif user.user_type == 'customer' %}
+      <li class="nav-item active">
+        <a href="{% url 'dashboard:index' %}" class="nav-link {% if request.resolver_match.url_name == 'index' %}active{% endif %}">Resumen</a>
+      </li>
+      
+      {% if user.enable_training %}
+      <li class="nav-item with-sub">
+        <a href="" class="nav-link">Entrenamiento</a>
+        <ul class="navbar-menu-sub">
+          <li class="nav-sub-item"><a href="{% url 'dashboard:training:customer_routine_list' %}" class="nav-sub-link">Rutinas</a></li>
+          <li class="nav-sub-item"><a href="{% url 'dashboard:training:customer_training_with_you' %}" class="nav-sub-link">Entrenamiento contigo</a></li>
+        </ul>
+      </li>
+      {% endif %}
+      
+      {% if user.enable_nutrition %}
+      <li class="nav-item with-sub">
+        <a href="" class="nav-link">Nutrición</a>
+        <ul class="navbar-menu-sub">
+          <li class="nav-sub-item"><a href="app-calendar.html" class="nav-sub-link">Menus</a></li>
+          <li class="nav-sub-item"><a href="app-chat.html" class="nav-sub-link">Lista de la compra</a></li>
+          <li class="nav-sub-item"><a href="app-contacts.html" class="nav-sub-link">Registro</a></li>
+        </ul>
+      </li>
+      {% endif %}
+      
+      {% if user.enable_tracking %}
+      <li class="nav-item with-sub">
+        <a href="" class="nav-link">Seguimiento</a>
+        <ul class="navbar-menu-sub">
+          <li class="nav-sub-item"><a href="app-calendar.html" class="nav-sub-link">General</a></li>
+          <li class="nav-sub-item"><a href="app-chat.html" class="nav-sub-link">Valores</a></li>
+          <li class="nav-sub-item"><a href="app-contacts.html" class="nav-sub-link">Entrenamiento</a></li>
+          <li class="nav-sub-item"><a href="app-contacts.html" class="nav-sub-link">Dieta</a></li>
+        </ul>
+      </li>
+      {% endif %}
+      {% endif %}
+      {% endif %}
+      {% if not user.is_authenticated %}
+      <li class="nav-item d-lg-none">
+        <a href="{% url 'accounts:login' %}" class="nav-link">Iniciar sesion</a>
+      </li>
+      <li class="nav-item d-lg-none">
+        <a href="{% url 'accounts:register' %}" class="nav-link">Regístrate</a>
+      </li>
+      {% endif %}
+    </ul>
+  </div><!-- navbar-menu-wrapper -->
+  <div class="navbar-right">
+
+    {% if user.is_authenticated %}
+    <div class="dropdown dropdown-profile">
+      <a href="" class="dropdown-link" data-toggle="dropdown" data-display="static">
+
+        <div class="avatar avatar-sm">
+          {% if user.image %}
+          <img src="{{user.image.url}}" class="rounded-circle" alt="">
+          {% else %}
+          <img src="{% static 'assets/img/default.png' %}" class="rounded-circle" alt="">
+          {% endif %}
+        </div>
+
+      </a><!-- dropdown-link -->
+      <div class="dropdown-menu dropdown-menu-right tx-13">
+        <div class="avatar avatar-lg mg-b-15">
+          {% if user.image %}
+          <img src="{{user.image.url}}" class="rounded-circle" alt="">
+          {% else %}
+          <img src="{% static 'assets/img/default.png' %}" class="rounded-circle" alt="">
+          {% endif %}
+        </div>
+
+        {% if user.get_full_name %}
+        <h6 class="tx-semibold mg-b-5">{{user.get_full_name | capfirst}}</h6>
+        {% else %}
+        <h6 class="tx-semibold mg-b-5">{{user.username | capfirst}}</h6>
+        {% endif %}
+
+
+        {% if user.is_superuser %}
+        <p class="mg-b-25 mb-2 tx-12 tx-color-03">Vista como: {{user.user_type}}</p>
+        <p class="mg-b-25 tx-12 tx-color-03"><a href="{% url 'admin:index' %}">Administrador</a></p>
+        {% else %}
+        <p class="mg-b-25 tx-12 tx-color-03">{{user.user_type}}</p>
+        {% endif %}
+
+
+        <a href="{% url 'accounts:profile_edit' %}" class="dropdown-item"><i data-feather="edit-3"></i> Editar perfil</a>
+        <div class="dropdown-divider"></div>
+        <a href="{% url 'accounts:logout' %}" class="dropdown-item"><i data-feather="log-out"></i>Cerrar sesión</a>
+      </div><!-- dropdown-menu -->
+    </div><!-- dropdown -->
+    {% else %}
+    <a href="{% url 'accounts:login' %}" class="d-none d-lg-block tx-gray-600 mr-2">Iniciar sesion</a>
+    <a href="{% url 'accounts:register' %}" class="d-none d-lg-block btn btn-outline-primary btn-sm">Regístrate</a>
+    {% endif %}
+  </div><!-- navbar-right -->
+</header><!-- navbar -->

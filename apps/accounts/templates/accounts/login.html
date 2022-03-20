@@ -1,0 +1,80 @@
+{% extends "base.html" %}
+{% load static %}
+{% block content %}
+<div class="content content-fixed content-auth">
+    <div class="container">
+        <div class="media align-items-stretch justify-content-center ht-100p pos-relative">
+            <div class="media-body align-items-center d-none d-lg-flex">
+                <div class="mx-wd-600">
+                    <img src="{% static 'assets/img/training.jpg' %}" class="img-fluid" alt="">
+                </div>
+            </div><!-- media-body -->
+            <form class="sign-wrapper mg-lg-l-50 mg-xl-l-60" method="post">
+                {% csrf_token %}
+                <div class="wd-100p">
+                    {% if form.non_field_errors %}
+                    {% for error in form.non_field_errors %}
+                    <div class="alert alert-danger" role="alert">
+                        {{error}}
+                    </div>
+                    {% endfor %}
+                    {% endif %}
+
+
+                    {% if next %}
+                    {% if user.is_authenticated %}
+                    {% with msg='Su cuenta no tiene acceso a esta página. Para continuar, por favor, inicie sesión con una cuenta que tenga acceso.' %}
+                    <div class="alert alert-danger" role="alert">
+                        {{msg}}
+                    </div>
+                    {% endwith %}
+                    {% else %}
+                    {% with msg='Inicie sesión para ver esta página.' %}
+                    <div class="alert alert-danger" role="alert">
+                        {{msg}}
+                    </div>
+                    {% endwith %}
+                    {% endif %}
+                    {% endif %}
+                    <h3 class="tx-color-01 mg-b-5">Iniciar Sesión</h3>
+                    <p class="tx-color-03 tx-16 mg-b-40">¡Bienvenido de nuevo! Por favor, inicie sesión para continuar.
+                    </p>
+
+                    <div class="form-group">
+                        <label for="{{form.username.id_for_label}}">Correo</label>
+                        <input id="{{ form.username.id_for_label }}" class="form-control" required type="email"
+                            name="{{ form.username.html_name }}">
+                        {% if form.username.errors %}
+                        {% for error in form.username.errors %}
+                        <div class="alert alert-danger mt-2" role="alert">
+                            <span></span>{{error}}</span>
+                        </div>
+                        {% endfor %}
+                        {% endif %}
+                    </div>
+                    <div class="form-group">
+                        <div class="d-flex justify-content-between mg-b-5">
+                            <label for="{{form.username.id_for_label}}" class="mg-b-0-f">Contraseña</label>
+                            <a href="{% url 'accounts:password_reset' %}" class="tx-13">¿Ha olvidado su contraseña?</a>
+
+                        </div>
+                        <input id="{{ form.password.id_for_label }}" required class="form-control"
+                            type="{{ form.password.widget_type }}" name="{{ form.password.html_name }}">
+                        {% if form.password.errors %}
+                        {% for error in form.password.errors %}
+                        <div class="alert alert-danger mt-2" role="alert">
+                            <span></span>{{error}}</span>
+                        </div>
+                        {% endfor %}
+                        {% endif %}
+                    </div>
+                    <button class="btn btn-brand-02 btn-block">Iniciar sesión</button>
+                    <div class="divider-text">or</div>
+                    <div class="tx-13 mg-t-20 tx-center">¿No tiene una cuenta? <a href="{% url 'accounts:register' %}">Regístrate</a>
+                    </div>
+                </div>
+            </form><!-- sign-wrapper -->
+        </div><!-- media -->
+    </div><!-- container -->
+</div><!-- content -->
+{% endblock content %}

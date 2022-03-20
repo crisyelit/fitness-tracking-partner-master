@@ -1,0 +1,33 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block css %}
+<link rel="stylesheet" href="{% static 'assets/css/dashforge.filemgr.css' %}">
+{% endblock css %}
+{% block content %}
+<div class="filemgr-wrapper">
+    {% include 'training/components/sidebar.html' %}
+
+    <div class="filemgr-content">
+
+        {% block body %}
+        {% if messages %}
+        {% for message in messages %}
+        <div class="col-12">
+            <div class="alert {% if message.tags %}alert-{{ message.tags }}{% endif %}" role="alert">
+                <i data-feather="alert-circle" class="mg-r-10"></i>
+                {% if message.level == DEFAULT_MESSAGE_LEVELS.ERROR %}Important: {% endif %}
+                {{ message }}
+            </div>
+        </div>
+        {% endfor %}
+        {% endif %}
+        {% endblock body %}
+    </div><!-- filemgr-content -->
+
+</div><!-- filemgr-wrapper -->
+{% endblock content %}
+{% block js %}
+<script src="{% static 'assets/js/dashforge.filemgr.js' %}"></script>
+<script src="{% static 'assets/js/training.js' %}"></script>
+{% endblock js %}

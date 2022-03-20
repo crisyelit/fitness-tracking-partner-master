@@ -1,0 +1,26 @@
+{
+	"folders": [
+		{
+			"path": "../e-commerce"
+		},
+		{
+			"path": "../pagemirtha"
+		},
+		{
+			"path": "../MarketPlace_AisModa"
+		},
+		{
+			"path": "../proyecto_pythonDjango"
+		},
+		{
+			"path": "../proyecto_React"
+		},
+		{
+			"path": "../proyecto_web"
+		},
+		{
+			"path": "."
+		}
+	],
+	"settings": {}
+}

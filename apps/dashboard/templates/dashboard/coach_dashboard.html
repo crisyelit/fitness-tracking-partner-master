@@ -1,0 +1,111 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block content %}
+<div class="content content-fixed">
+    <div class="container pd-x-0 pd-lg-x-10 pd-xl-x-0">
+        {% include 'dashboard/components/title.html' %}
+
+        <div class="row">
+            <div class="col-sm-6 col-lg-4 mg-t-10 mg-lg-t-0">
+                <div class="card card-body flex-row justify-content-between align-items-center">
+                    <h6 class="tx-uppercase tx-14 tx-spacing-1 tx-color-02 tx-semibold mb-0">Clientes activos:
+                        {{user.coachOf.active.count}}</h6>
+                        <a href="{% url 'dashboard:training:customer_list' %}">Ver todos</a>
+                </div>
+            </div><!-- col -->
+            <div class="col-sm-6 col-lg-4 mg-t-10 mg-lg-t-0">
+                <div class="card card-body flex-row justify-content-between align-items-center">
+                    <h6 class="tx-uppercase tx-14 tx-spacing-1 tx-color-02 tx-semibold mb-0">Rutinas:
+                        {{user.routine_set.all.count}}</h6>
+                    <a href="{% url 'dashboard:training:routine_list' %}">Ver todos</a>
+
+                </div>
+            </div><!-- col -->
+            <div class="col-sm-6 col-lg-4 mg-t-10 mg-lg-t-0">
+                <div class="card card-body flex-row justify-content-between align-items-center">
+                    <h6 class="tx-uppercase tx-14 tx-spacing-1 tx-color-02 tx-semibold mb-0">Ejercicios:
+                        {{user.exercise_set.all.count}}</h6>
+                    <a href="{% url 'dashboard:training:exercise_list' %}">Ver todos</a>
+
+                </div>
+            </div><!-- col -->
+        </div><!-- row -->
+        <div class="row">
+            <div class="col-lg-4 mg-t-10">
+              <div class="row row-xs">
+                <div class="col-12 col-md-6 col-lg-12">
+                  <div class="row">
+                    <div class="col d-flex">
+                      <div class="avatar avatar-xxl">
+                        {% if user.image %}
+                        <img src="{{user.image.url}}" class="rounded" alt="">
+                        {% else %}
+                        <img src="{% static 'assets/img/default.png' %}" class="rounded" alt="">
+                        {% endif %}
+                      </div>
+                      <div class="p-2">
+                        {% if user.get_full_name %}
+                        <h5 class="mg-b-2 tx-spacing--1">{{user.get_full_name | capfirst}}</h5>
+                        {% else %}
+                        <h5 class="mg-b-2 tx-spacing--1">{{user.username | capfirst}}</h5>
+                        {% endif %}
+          
+                        {% if user.is_superuser %}
+                        <p class="tx-color-03 mb-0">Vista como: {{user.user_type}}</p>
+                        <p class="tx-color-03 mb-0"><a href="{% url 'admin:index' %}">Administrador</a></p>
+                        {% else %}
+                        <p class="tx-color-03">{{user.user_type}}</p>
+                        {% endif %}
+                        <div class="d-flex">
+                          <a href="{% url 'accounts:profile_edit' %}" class="btn btn-xs btn-white flex-fill">Ver perfil</a>
+                        </div>
+                      </div>
+                    </div><!-- col -->
+                  </div><!-- row -->
+
+                </div><!-- col -->
+              </div><!-- row -->
+            </div><!-- col -->
+            <div class="col-lg-8 mg-t-10">
+              <div class="card" id="customerProgress">
+                <div class="card-header d-flex align-items-start justify-content-between">
+                  <h6 class="lh-5 mg-b-0">Progreso clientes</h6>
+                   <!-- <div class="btn-group mg-t-20 mg-sm-t-0">
+                    <button class="btn btn-xs btn-white btn-uppercase active">Semana</button>
+                    <button class="btn btn-xs btn-white btn-uppercase">Mes</button>
+                    <button class="btn btn-xs btn-white btn-uppercase">Año</button>
+                  </div> --> <!-- btn-group -->
+                </div><!-- card-header -->
+                <div class="card-body pd-y-15 pd-x-10">
+                  <div class="table-responsive">
+                    <table class="table table-borderless table-sm tx-13 tx-nowrap mg-b-0">
+                      <thead>
+                        <tr class="tx-10 tx-spacing-1 tx-color-03 tx-uppercase">
+                          <th>Cliente</th>
+                          <th class="text-right">Porcentaje (%)</th>
+                          <th class="text-right">Valor</th>
+                          <th class="text-right">Dias</th>
+                        </tr>
+                      </thead>
+                      <tbody>
+                      </tbody>
+                    </table>
+                  </div>
+                </div><!-- card-body -->
+              </div><!-- card -->
+            </div>
+          </div><!-- row -->
+    </div><!-- container -->
+</div><!-- content -->
+{% endblock content %}
+
+{% block js %}
+<script src="{% static 'lib/jquery.flot/jquery.flot.js' %}"></script>
+<script src="{% static 'lib/jquery.flot/jquery.flot.stack.js' %}"></script>
+<script src="{% static 'lib/jquery.flot/jquery.flot.resize.js' %}"></script>
+<script src="{% static 'lib/flot.curvedlines/curvedLines.js' %}"></script>
+<script src="{% static 'lib/peity/jquery.peity.min.js' %}"></script>
+<script src="{% static 'lib/chart.js/Chart.bundle.min.js' %}"></script>
+<script src="{% static 'assets/js/coach_dashboard.js' %}"></script>
+{% endblock js %}

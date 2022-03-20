@@ -1,0 +1,16 @@
+{% extends 'training/coach/base.html' %}
+{% load static crispy_forms_tags %}
+{% block body %}
+<div class="filemgr-content-header">
+    <h4 class="mg-b-0">Nuevo Ejercicio</h4>
+</div><!-- filemgr-content-header -->
+<div class="filemgr-content-body">
+    <div class="pd-20 pd-lg-25 pd-xl-30">
+        {% crispy form %}
+    </div>
+</div><!-- filemgr-content-body -->
+{% endblock body %}
+{% block js %}
+<script src="{% static 'assets/js/dashforge.filemgr.js' %}"></script>
+<script src="{% static 'assets/js/exercises.js' %}"></script>
+{% endblock js %}

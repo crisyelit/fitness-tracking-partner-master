@@ -1,0 +1,18 @@
+{% load static custom_tags crispy_forms_tags %}
+
+<div class="d-lg-none col-12 custom-sidebar mobile close" id="filterSidebar">
+    <div class="sidebar-header p-0">
+        <h5 class="card-title"><i class="fas fa-filter"></i> Filtros</h5>
+        <button id="closeFilterSidebar" class="btn btn-close tx-16"><i class="fas fa-times"></i></button>
+    </div>
+    <div class="sidebar-body p-0 mt-2">
+        <div class="card">
+            <div class="card-body d-flex flex-column">
+                <form method="get">
+                    {{ filter_form|crispy }}
+                    <input type="submit" />
+                </form>
+            </div>
+        </div>
+    </div>
+</div>

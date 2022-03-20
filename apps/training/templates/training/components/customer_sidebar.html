@@ -1,0 +1,61 @@
+{% load static %}
+<div class="d-none d-lg-block col-12 col-lg-3 customer-routine-sidebar">
+    <div class="sidebar-header p-0">
+        <h5>Rutinas</h5>
+    </div>
+    <div class="sidebar-body p-0 mt-2">
+        {% for customer_routine in user.customerOf.sort_active %}
+        {% if customer_routine.coach == user.parent %}
+        <div data-slug="{{routine.slug}}" data-ro="{{customer_routine.slug}}" class="card flex-row align-items-center justify-content-between p-2 mt-2 {% if routine.slug == customer_routine.slug %}bg-gray-200{% endif %}">
+            <div class="d-flex flex-column">
+                <h6 class="tx-16 tx-gray-600"><a href="{% url 'dashboard:training:customer_routine_list' %}?routine={{customer_routine.slug}}">{{customer_routine.routine.name | capfirst}}</a></h6>
+                <div class="d-flex">
+                    <div class="avatar avatar-sm">
+                        {% if customer_routine.routine.user.image %}
+                        <img src="{{customer_routine.routine.user.image.url}}" class="rounded-circle" alt="">
+                        {% else %}
+                        <img src="{% static 'assets/img/default.png' %}" class="rounded-circle" alt="">
+                        {% endif %}
+                    </div>
+                    <div class="media-body mg-l-10">
+                        <h6 class="tx-13 mb-0">
+                            {{customer_routine.routine.user.get_full_name | capfirst}}</h6>
+                        <span class="tx-12">Entrenador</span>
+                    </div><!-- media-body -->
+                </div>
+            </div>
+        </div><!-- card -->
+        {% endif %}
+        {% endfor %}
+    </div>
+</div>
+
+<div class="col-12 customer-routine-sidebar mobile close" id="leftSidebar">
+    <div class="sidebar-header p-0">
+        <h5>Rutinas</h5>
+        <button id="leftSidebarClose" class="btn btn-close tx-16"><i class="fas fa-times"></i></button>
+    </div>
+    <div class="sidebar-body p-0 mt-2">
+        {% for customer_routine in user.customerOf.sort_active %}
+        <div data-slug="{{routine.slug}}" data-ro="{{customer_routine.slug}}" class="card flex-row align-items-center justify-content-between p-2 mt-2 {% if routine.slug == customer_routine.slug %}bg-gray-200{% endif %}">
+            <div class="d-flex flex-column">
+                <h6 class="tx-16 tx-gray-600"><a href="{% url 'dashboard:training:customer_routine_list' %}?routine={{customer_routine.slug}}">{{customer_routine.routine.name | capfirst}}</a></h6>
+                <div class="d-flex">
+                    <div class="avatar avatar-sm">
+                        {% if customer_routine.routine.user.image %}
+                        <img src="{{customer_routine.routine.user.image.url}}" class="rounded-circle" alt="">
+                        {% else %}
+                        <img src="{% static 'assets/img/default.png' %}" class="rounded-circle" alt="">
+                        {% endif %}
+                    </div>
+                    <div class="media-body mg-l-10">
+                        <h6 class="tx-13 mb-0">
+                            {{customer_routine.routine.user.get_full_name | capfirst}}</h6>
+                        <span class="tx-12">Entrenador</span>
+                    </div><!-- media-body -->
+                </div>
+            </div>
+        </div><!-- card -->
+        {% endfor %}
+    </div>
+</div>

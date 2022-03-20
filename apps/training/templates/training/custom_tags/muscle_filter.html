@@ -1,0 +1,10 @@
+<div class="filter">
+    <span class="tx-14 tx-bold">Musculos</span>
+    <ul>
+        {% for muscle in result %}
+        <li>
+            <a href="?muscle={{muscle.slug}}">{{muscle.name | capfirst}}</a>
+        </li>
+        {% endfor %}
+    </ul>
+</div>

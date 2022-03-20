@@ -1,0 +1,10 @@
+<div class="filter">
+    <span class="tx-14 tx-bold">Recursos</span>
+    <ul>
+        {% for resource in result %}
+        <li>
+            <a href="?resource={{resource.slug}}">{{resource.name | capfirst}}</a>
+        </li>
+        {% endfor %}
+    </ul>
+</div>

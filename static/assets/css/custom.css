@@ -1,0 +1,242 @@
+.filemgr-content-body {
+    overflow: scroll;
+}
+
+.filemgr-wrapper .filemgr-sidebar .filemgr-sidebar-header a {
+    color: white;
+}
+
+.filemgr-sidebar-body {
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+}
+
+.formset_container {
+    position: relative;
+}
+
+.formset_container .btn-delete {
+    width: 30px;
+    height: 30px;
+    background: white;
+    border-radius: 100%;
+    position: absolute;
+    top: -12px;
+    right: 7px;
+}
+
+.card.routine .card-body {
+    display: flex;
+}
+
+.customer-routine {
+    position: relative;
+}
+
+.customer-routine .customer-routine-sidebar, .custom-sidebar {
+    background-color: white;
+}
+
+.customer-routine .customer-routine-sidebar.mobile, .customer-routine .customer-routine-sidebar.right, .custom-sidebar.mobile {
+    top: 0;
+    position: fixed;
+    z-index: 1000;
+    width: 100%;
+    height: 100vh;
+    background-color: white;
+}
+
+.customer-routine .customer-routine-sidebar .sidebar-header, .custom-sidebar .sidebar-header {
+    display: flex;
+    justify-content: space-between;
+}
+
+.customer-routine .customer-routine-sidebar.active, .custom-sidebar.active {
+    -webkit-animation: slide 0.5s;
+    animation: slide 0.5s;
+}
+
+.customer-routine .customer-routine-sidebar.close, .custom-sidebar.close {
+    -webkit-animation: slide-out 0.5s forwards;
+    animation: slide-out 0.5s forwards;
+}
+
+.bottom-action-container {
+    width: 100%;
+    position: fixed;
+    bottom: calc(52px - 65vh);
+    left: 0;
+    z-index: 999;
+    height: 65vh;
+
+    display: flex;
+    flex-direction: column;
+    padding: 1rem;
+    background-color: white;
+    box-shadow: rgba(100, 100, 111, 0.2) 0px 7px 29px 0px;
+}
+
+.bottom-action-container .bottom-action-header {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+
+    padding: 0 0 .5rem 0;
+}
+.bottom-action-container .bottom-action-body .counter-container {
+    display: flex;
+    justify-content: center;
+}
+
+.bottom-action-container .bottom-action-body .counter-container .counter {
+    width: 100px;
+    height: 100px;
+
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+
+.bottom-action-container.active {
+    -webkit-animation: slide-up 0.5s forwards;
+    animation: slide-up 0.5s forwards;
+}
+
+.bottom-action-container.close {
+    -webkit-animation: slide-down 0.5s forwards;
+    animation: slide-down 0.5s forwards;
+}
+
+.bottom-action-container .bottom-action-item {
+    position: relative;
+}
+
+.form-activation {
+    position: absolute;
+    top: 0;
+    left: 0;
+    z-index: 100;
+    height: 100%;
+    background-color: white;
+    width: 100%;
+    padding: 1rem;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+}
+
+.filter {
+    margin-bottom: 1rem;
+}
+
+.filter ul {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+}
+
+/* Left Slide */
+@-webkit-keyframes slide {
+    from {
+        right: translateX(-100%);
+        opacity: 0;
+    }
+
+    to {
+        transform: translateX(0%);
+        opacity: 1;
+    }
+}
+
+@keyframes slide {
+    from {
+        transform: translateX(-100%);
+        opacity: 0;
+    }
+
+    to {
+        transform: translateX(0%);
+        opacity: 1;
+    }
+}
+
+@-webkit-keyframes slide-out {
+    from {
+        transform: translateX(0%);
+        opacity: 1;
+    }
+
+    to {
+        transform: translateX(-100%);
+        opacity: 0;
+    }
+}
+
+@keyframes slide-out {
+    from {
+        transform: translateX(0%);
+        opacity: 1;
+    }
+
+    to {
+        transform: translateX(-100%);
+        opacity: 0;
+    }
+}
+
+/* Up Slide */
+@-webkit-keyframes slide-up {
+    from {
+        transform: translateY(0%);
+    }
+
+    to {
+        transform: translateY(calc(52px - 65vh));
+    }
+}
+
+@keyframes slide-up {
+    from {
+        transform: translateY(0%);
+    }
+
+    to {
+        transform: translateY(calc(52px - 65vh));
+    }
+}
+
+@-webkit-keyframes slide-down {
+    from {
+        transform: translateY(calc(52px - 65vh));
+    }
+
+    to {
+        transform: translateY(0%);
+    }
+}
+
+@keyframes slide-down {
+    from {
+        transform: translateY(calc(52px - 65vh));
+    }
+
+    to {
+        transform: translateY(0%);
+    }
+}
+
+@media (min-width: 992px) {
+    .card.routine .card-body .actions {
+        margin-left: auto;
+        align-self: center;
+    }
+    .customer-routine .customer-routine-sidebar.mobile, .customer-routine .customer-routine-sidebar.right {
+        height: 100%;
+    }
+    .customer-routine .customer-routine-sidebar.mobile {
+        display: none;
+    }
+}

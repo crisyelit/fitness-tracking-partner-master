@@ -1,0 +1,65 @@
+{% extends 'base.html' %} {% block content %}
+<!--Section-->
+<section class="section section-dashboard section-dashboard-student">
+  <div class="container">
+    <div class="display-spacing display-spacing-plus">
+      <div class="row">
+        {% include "accounts/components/sidebar.html" %}
+        <div class="col-12 col-sm-12 col-md-12 col-lg-8">
+          <div class="el-panel el-panel-admin-status">
+            <div class="el-panel-body">
+              <div class="el-panel-title">
+                <h2>Profile Status</h2>
+                <p class="text-center pt-15">Please Activate Your Account</p>
+              </div>
+            </div>
+          </div>
+          <div class="row">
+            <div class="col-12 col-sm-12 col-md-6">
+              <div class="el-panel el-panel-financial bg-color-2">
+                <div class="el-panel-body">
+                  <p class="text-center text-light">Lessons per Student</p>
+                  <p class="price">
+                    <span class="value text-light">18</span>
+                  </p>
+                </div>
+              </div>
+            </div>
+            <div class="col-12 col-sm-12 col-md-6">
+              <div class="el-panel el-panel-financial bg-color-1">
+                <div class="el-panel-body">
+                  <p class="text-center text-light">Total Lessons</p>
+                  <p class="price">
+                    <span class="value text-light">33</span>
+                  </p>
+                </div>
+              </div>
+            </div>
+            <div class="col-12 col-sm-12 col-md-6">
+              <div class="el-panel el-panel-financial bg-color-4">
+                <div class="el-panel-body">
+                  <p class="text-center text-light">Average Rating</p>
+                  <p class="price">
+                    <span class="value text-light">4.5</span>
+                  </p>
+                </div>
+              </div>
+            </div>
+            <div class="col-12 col-sm-12 col-md-6">
+              <div class="el-panel el-panel-financial bg-color-5">
+                <div class="el-panel-body">
+                  <p class="text-center text-light">Joined Eduline</p>
+                  <p class="price">
+                    <span class="value text-light">4</span>
+                  </p>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+<!--/-->
+{% endblock content %}

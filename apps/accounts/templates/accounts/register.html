@@ -1,0 +1,124 @@
+{% extends 'base.html' %}
+{% load static %}
+{% block content %}
+<div class="content content-fixed content-auth">
+  <div class="container">
+    {% if messages %}
+    {% for message in messages %}
+    <div class="alert {% if message.tags %}alert-{{ message.tags }}{% endif %}" role="alert">
+      <i data-feather="alert-circle" class="mg-r-10"></i>
+      {% if message.level == DEFAULT_MESSAGE_LEVELS.ERROR %}Important: {% endif %}
+      {{ message }}
+    </div>
+    {% endfor %}
+    {% endif %}
+    <div class="media align-items-stretch justify-content-center ht-100p">
+
+      <div class="sign-wrapper mg-lg-r-50 mg-xl-r-60">
+        <form class="pd-t-20 wd-100p" method="POST">
+
+          {% if form.non_field_errors %}
+          {% for error in form.non_field_errors %}
+          <div class="alert alert-success" role="alert">
+            {{error}}
+          </div>
+          {% endfor %}
+          {% endif %}
+
+          <h4 class="tx-color-01 mg-b-5">Crear nueva cuenta</h4>
+          <p class="tx-color-03 tx-16 mg-b-40">Registrarse es gratis y solo toma un minuto.</p>
+          {% csrf_token %}
+          <div class="form-group">
+            <label>Correo electrónico</label>
+            {{ form.email }}
+            {% if form.email.errors %}
+            {% for error in form.email.errors %}
+            <div class="alert alert-danger mt-2" role="alert">
+              <span>{{error}}</span>
+            </div>
+            {% endfor %}
+            {% endif %}
+
+          </div>
+
+          <div class="form-group">
+            <label>Nombre de usuario</label>
+            {{ form.username }}
+            {% if form.username.errors %}
+            {% for error in form.username.errors %}
+            <div class="alert alert-danger mt-2" role="alert">
+              <span>{{error}}</span>
+            </div>
+            {% endfor %}
+            {% endif %}
+
+          </div>
+
+          <div class="form-group">
+            <label>Nombre</label>
+            {{ form.first_name }}
+            {% if form.first_name.errors %}
+            {% for error in form.first_name.errors %}
+            <div class="alert alert-danger mt-2" role="alert">
+              <span>{{error}}</span>
+            </div>
+            {% endfor %}
+            {% endif %}
+          </div>
+          <div class="form-group">
+            <label>Apellido</label>
+            {{ form.last_name }}
+            {% if form.last_name.errors %}
+            {% for error in form.last_name.errors %}
+            <div class="alert alert-danger mt-2" role="alert">
+              <span>{{error}}</span>
+            </div>
+            {% endfor %}
+            {% endif %}
+          </div>
+
+
+          <div class="form-group">
+            <div class="d-flex justify-content-between mg-b-5">
+              <label class="mg-b-0-f">Contraseña</label>
+            </div>
+            <input id="{{ form.password1.id_for_label }}" required class="form-control"
+              type="{{ form.password1.widget_type }}" name="{{ form.password1.html_name }}" placeholder="Contraseña">
+          </div>
+
+          <div class="form-group">
+            <div class="d-flex justify-content-between mg-b-5">
+              <label class="mg-b-0-f">Confirmar contraseña</label>
+            </div>
+            <input id="{{ form.password2.id_for_label }}" required class="form-control"
+              type="{{ form.password2.widget_type }}" name="{{ form.password2.html_name }}"
+              placeholder="Confirmar ontraseña">
+            {% if form.password2.errors %}
+            {% for error in form.password2.errors %}
+            <div class="alert alert-danger mt-2" role="alert">
+              <span>{{error}}</span>
+            </div>
+            {% endfor %}
+            {% endif %}
+          </div>
+          <div class="form-group tx-12">
+            Haz click aqui <strong>Crear cuenta </strong> a continuación, acepta nuestros términos de servicio y
+            privacidad.
+          </div><!-- form-group -->
+
+          <button class="btn btn-brand-02 btn-block">Crear cuenta</button>
+          <div class="divider-text">o</div>
+          <div class="tx-13 mg-t-20 tx-center">¿Ya tienes una cuenta? <a href="{% url 'accounts:login' %}"> Inicia
+              sesión.</a></div>
+
+        </form>
+      </div><!-- sign-wrapper -->
+      <div class="media-body pd-y-30 pd-lg-x-50 pd-xl-x-60 align-items-center d-none d-lg-flex pos-relative">
+        <div class="mx-lg-wd-500 mx-xl-wd-550">
+          <img src="{% static 'assets/img/register.jpg' %}" class="img-fluid" alt="">
+        </div>
+      </div><!-- media-body -->
+    </div><!-- media -->
+  </div><!-- container -->
+</div><!-- content -->
+{% endblock content %}

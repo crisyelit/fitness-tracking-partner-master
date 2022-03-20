@@ -1,0 +1,112 @@
+{% load static custom_tags %}
+
+<div class="d-none d-lg-block col-12 col-lg-3 customer-routine-sidebar">
+
+    {% if customer_routine and day_progress.code != "COMPLETED" %}
+    {% is_completed exercise_routine=progress.current_exercise progress=progress as is_completed %}
+    <div class="card">
+        <div class="card-body">
+
+            {% if is_completed != True %}
+            <div id="desktopFormActivation" class="form-activation">
+                <button id="openDesktopFormBtn" class="btn btn-primary btn-block">Continuar</button>
+            </div>
+            {% if progress.current_exercise.rest %}
+            <div class="d-flex flex-column align-items-center">
+                <h6>Descanso</h6>
+                <div id="deskCountdown" data-time="{{progress.current_exercise.rest}}">
+                </div>
+            </div>
+            {% endif %}
+            <form method="post" id="exerciseRoutineDesktopForm" class="ht-auto wd-100p d-flex flex-column mt-2"
+                {% if progress.next_exercise %}data-next="{{progress.next_exercise.slug}}" {% endif %} data-parsley-validate>
+                {% csrf_token %}
+                <input type="hidden" name="progress" value="{{progress.id}}">
+                <input type="hidden" name="exercise_routine" value="{{progress.current_exercise.id}}">
+
+                <input type="number" class="form-control"
+                {% if progress.current_exercise.exercise.exercise_result == 'weight' %}
+                 placeholder="¿Cuánto peso levantaste?"
+                 {% elif progress.current_exercise.exercise.exercise_result == 'time' %}
+                 placeholder="¿Cuánto tiempo (Segundos) realizaste?"
+                 {% elif progress.current_exercise.exercise.exercise_result == 'repetitions' %}
+                 placeholder="¿Cuántas repeticiones realizaste?"
+                {% endif %}
+                 name="exercise_result" required>
+
+                <div class="d-flex justify-content-between mt-2 justify-self-end">
+                    <button type="submit" class="btn btn-primary btn-block" disabled>Continuar</button>
+                </div>
+            </form>
+            {% else %}
+            <a href="?exercise={{progress.next_exercise.slug}}" class="btn btn-primary btn-block">Continuar</a>
+            {% endif %}
+
+        </div>
+    </div>
+    {% endif %}
+    <div class="sidebar-header p-0">
+        <h5>Ejercicios</h5>
+    </div>
+    <div class="sidebar-body p-0 mt-2">
+        {% if customer_routine %}
+        {% for exercise_routine in progress.day.exerciseroutine_set.all %}
+        <div
+            class="card flex-row align-items-center justify-content-between p-2 mt-2 {% if progress.current_exercise.slug == exercise_routine.slug %}bg-gray-200{% endif %}">
+            <div class="d-flex flex-column">
+                <div class="d-flex">
+                    <div class="avatar avatar-sm">
+                        {% if exercise_routine.exercise.image %}
+                        <img src="{{exercise_routine.exercise.image.url}}" class="rounded" alt="">
+                        {% else %}
+                        <img src="{% static 'assets/img/placehold.jpg' %}" class="rounded" alt="">
+                        {% endif %}
+                    </div>
+                    <div class="media-body mg-l-10">
+                        <h6 class="tx-14 tx-gray-600"><a
+                                href="{% url 'dashboard:training:customer_training_with_you' %}?exercise={{exercise_routine.slug}}">{{exercise_routine.exercise.name | capfirst}}
+                            </a>
+                            {% check_is_completed exercise_routine=exercise_routine.id progress=progress.id %}
+                        </h6>
+                    </div><!-- media-body -->
+                </div>
+            </div>
+        </div><!-- card -->
+        {% endfor %}
+        {% endif %}
+    </div>
+</div>
+
+<div class="col-12 customer-routine-sidebar mobile close" id="leftSidebar">
+    <div class="sidebar-header p-0">
+        <h5>Ejercicios</h5>
+        <button id="leftSidebarClose" class="btn btn-close tx-16"><i class="fas fa-times"></i></button>
+    </div>
+    <div class="sidebar-body p-0 mt-2">
+        {% if customer_routine %}
+        {% for exercise_routine in progress.day.exerciseroutine_set.all %}
+        <div
+            class="card flex-row align-items-center justify-content-between p-2 mt-2 {% if progress.current_exercise.slug == exercise_routine.slug %}bg-gray-200{% endif %}">
+            <div class="d-flex flex-column">
+                <div class="d-flex">
+                    <div class="avatar avatar-sm">
+                        {% if exercise_routine.exercise.image %}
+                        <img src="{{exercise_routine.exercise.image.url}}" class="rounded" alt="">
+                        {% else %}
+                        <img src="{% static 'assets/img/placehold.jpg' %}" class="rounded" alt="">
+                        {% endif %}
+                    </div>
+                    <div class="media-body mg-l-10">
+                        <h6 class="tx-14 tx-gray-600"><a
+                                href="{% url 'dashboard:training:customer_training_with_you' %}?exercise={{exercise_routine.slug}}">
+                                {{exercise_routine.exercise.name | capfirst}}
+                                {% check_is_completed exercise_routine=exercise_routine.id progress=progress.id %}</a>
+                        </h6>
+                    </div><!-- media-body -->
+                </div>
+            </div>
+        </div><!-- card -->
+        {% endfor %}
+        {% endif %}
+    </div>
+</div>

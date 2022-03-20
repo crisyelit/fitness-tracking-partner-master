@@ -1,0 +1,52 @@
+{% load custom_tags %}
+
+{% if customer_routine and  day_progress.code != "COMPLETED" %}
+{% is_completed exercise_routine=progress.current_exercise.id progress=progress.id as is_completed %}
+
+<div class="d-lg-none bottom-action-container" id="bottomActionContainer">
+    <div class="bottom-action-header bd-b">
+        {% if progress.next_exercise  %}
+        {% if is_completed != True %}
+        <a id="openBottomAction" class="tx-primary tx-18"><i class="fas fa-forward"></i>
+            Continuar</a>
+        {% else %}
+        <a href="?exercise={{progress.next_exercise.slug}}" class="tx-primary tx-18"><i class="fas fa-forward"></i>
+            Continuar</a>
+        {% endif %}
+        {% else %}
+        <a id="openBottomAction" class="tx-success tx-18"><i class="fas fa-check"></i>
+            Finalizar</a>
+        {% endif %}
+    </div>
+    <div class="d-flex flex-column align-items-center py-4">
+        {% if is_completed != True %}
+        {% if progress.current_exercise.rest %}
+        <h6>Descanso</h6>
+        <div id="mobileCountdown" data-time="{{progress.current_exercise.rest}}">
+        </div>
+        {% endif %}
+        <form method="post" id="exerciseRoutineForm" class="ht-auto wd-100p d-flex flex-column mt-2"
+            {% if progress.next_exercise %}data-next="{{progress.next_exercise.slug}}" {% endif %} data-parsley-validate>
+            {% csrf_token %}
+            <input type="hidden" name="progress" value="{{progress.id}}">
+            <input type="hidden" name="exercise_routine" value="{{progress.current_exercise.id}}">
+
+            <input type="number" class="form-control"
+            {% if progress.current_exercise.exercise.exercise_result == 'weight' %}
+             placeholder="¿Cuánto peso levantaste?"
+             {% elif progress.current_exercise.exercise.exercise_result == 'time' %}
+             placeholder="¿Cuánto tiempo (Segundos) realizaste?"
+             {% elif progress.current_exercise.exercise.exercise_result == 'repetitions' %}
+             placeholder="¿Cuántas repeticiones realizaste?"
+            {% endif %}
+             name="exercise_result" required>
+
+            <div class="d-flex justify-content-between mt-2 justify-self-end">
+                <button id="closeBottomAction" class="btn btn-secondary">Cancelar</button>
+                <button type="submit" class="btn btn-primary" disabled>Continuar</button>
+            </div>
+        </form>
+        {% endif %}
+    </div>
+</div>
+{% endif %}

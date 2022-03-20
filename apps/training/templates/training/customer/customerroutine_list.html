@@ -1,0 +1,164 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block content %}
+<div class="content content-fixed">
+    <div class="container pd-x-0 pd-lg-x-10 pd-xl-x-0">
+        <div class="d-sm-flex align-items-center justify-content-between mg-b-20 mg-lg-b-25 mg-xl-b-30">
+            <div>
+                <nav aria-label="breadcrumb">
+                    <ol class="breadcrumb breadcrumb-style1 mg-b-10">
+                        <li class="breadcrumb-item"><a href="{% url 'dashboard:index' %}">Escritorio</a></li>
+                        <li class="breadcrumb-item active" aria-current="page">Rutinas</li>
+                    </ol>
+                </nav>
+            </div>
+        </div>
+        <div class="row customer-routine">
+            {% include 'training/components/customer_sidebar.html' %}
+
+
+            <div class="col-12 col-lg-9 customer-routine-content">
+                {% if routine %}
+                <div class="row">
+                    <div class="col-12 d-flex justify-content-between align-items-center">
+                        <div class="d-flex align-items-center">
+                            <button id="leftSidebarOpen" class="d-lg-none btn btn-open tx-16"><i
+                                    class="fas fa-ellipsis-v"></i></button>
+                            <div>
+                                <h4 class="mb-0">
+                                    {{routine.routine.name | capfirst}}
+                                    {% if routine.status == 'pending' %}
+                                    <span class="badge badge-pill badge-warning">Pendiente</span>
+                                    {% elif routine.status == 'active' %}
+                                    <span class="badge badge-pill badge-primary">Activa</span>
+                                    {% elif routine.status == 'completed' %}
+                                    <span class="badge badge-pill badge-success">Finalizada</span>
+                                    {% elif routine.status == 'canceled' %}
+                                    <span class="badge badge-pill badge-danger">Cancelada</span>
+                                    {% endif %}
+                                </h4>
+                                <span class="text-muted tx-12">({{routine.start_date|date:"d/M/Y"}} -
+                                    {{routine.end_date|date:"d/M/Y"}})</span>
+
+                            </div>
+                        </div>
+
+                        {% if routine.status == 'active' %}
+                        <a href="{% url 'dashboard:training:customer_training_with_you' %}"
+                            class="d-none d-lg-block btn btn-primary btn-sm">Iniciar</a>
+                        {% endif %}
+
+                    </div>
+                </div>
+
+                <div class="row">
+                    <div class="col-12 mb-2">
+                        <div class="card mt-2">
+                            <div class="card-body">
+                                <p class="card-text">{{routine.routine.description}}</p>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-12">
+                        <div class="accordion">
+                            {% for day in routine.routine.dayroutine_set.all %}
+                            <h6>{{day.name | capfirst}} {% if day.day %}<span
+                                    class="text-muted">({{day.day | capfirst}})</span>{% endif %}</h6>
+                            <div class="">
+                                {% for exercise in day.exerciseroutine_set.all %}
+                                <div class="card mt-2 bg-gray-100 p-2">
+                                    <div class="card-header d-flex">
+                                        <div class="avatar mr-2">
+                                            {% if exercise.exercise.image %}
+                                            <img src="{{exercise.exercise.image.url}}" class="rounded" alt="">
+                                            {% else %}
+                                            <img src="{% static 'assets/img/placehold.jpg' %}" class="rounded" alt="">
+                                            {% endif %}
+                                        </div>
+                                        <h5 class="card-title">{{exercise.exercise.name | capfirst}}</h5>
+                                    </div>
+                                    <div class="card-body">
+                                        <div class="row">
+                                            <div class="col-6 col-sm">
+                                                <label
+                                                    class="tx-10 tx-medium tx-spacing-1 tx-color-03 tx-uppercase tx-sans mg-b-10">Series</label>
+                                                {% if exercise.cycles %}
+                                                <p class="mg-b-0">{{exercise.cycles}}</p>
+                                                {% else %}
+                                                <p class="mg-b-0"> --- </p>
+                                                {% endif %}
+                                            </div><!-- col -->
+                                            <div class="col-sm mg-t-20 mg-sm-t-0">
+                                                <label
+                                                    class="tx-10 tx-medium tx-spacing-1 tx-color-03 tx-uppercase tx-sans mg-b-10">Repeticiones</label>
+                                                {% if exercise.repetitions %}
+                                                <p class="mg-b-0">{{exercise.repetitions}}</p>
+                                                {% else %}
+                                                <p class="mg-b-0"> --- </p>
+                                                {% endif %}
+                                            </div><!-- col -->
+                                            <div class="col-sm mg-t-20 mg-sm-t-0">
+                                                <label
+                                                    class="tx-10 tx-medium tx-spacing-1 tx-color-03 tx-uppercase tx-sans mg-b-10">Duración
+                                                    (Segundos)</label>
+
+                                                {% if exercise.duration %}
+                                                <p class="mg-b-0">{{exercise.duration}}</p>
+                                                {% else %}
+                                                <p class="mg-b-0"> --- </p>
+                                                {% endif %}
+
+                                            </div><!-- col -->
+                                            <div class="col-sm mg-t-20 mg-sm-t-0">
+                                                <label
+                                                    class="tx-10 tx-medium tx-spacing-1 tx-color-03 tx-uppercase tx-sans mg-b-10">Descanso
+                                                    (Segundos)</label>
+                                                {% if exercise.rest %}
+                                                <p class="mg-b-0">{{exercise.rest}}</p>
+                                                {% else %}
+                                                <p class="mg-b-0"> --- </p>
+                                                {% endif %}
+                                            </div><!-- col -->
+                                        </div><!-- row -->
+                                    </div>
+
+                                </div>
+                                {% endfor %}
+
+                            </div>
+                            {% endfor %}
+                        </div>
+                    </div>
+                </div>
+
+                <div class="d-lg-none col-12 bottom-action-button">
+                    {% if routine.status == 'active' %}
+                    <a href="{% url 'dashboard:training:customer_training_with_you' %}"
+                        class="btn btn-primary btn-block">Iniciar</a>
+                    {% endif %}
+                </div>
+                {% else %}
+                <div class="card">
+                    <div class="card-body">
+                        <h6>No tienes rutinas.</h6>
+                    </div>
+                </div>
+                {% endif %}
+            </div>
+
+        </div>
+    </div><!-- container -->
+</div><!-- content -->
+
+{% endblock content %}
+
+{% block js %}
+
+<script src="{% static 'assets/js/customer_routine.js' %}"></script>
+<script>
+    $('.accordion').accordion({
+        heightStyle: 'content'
+    });
+</script>
+{% endblock js %}

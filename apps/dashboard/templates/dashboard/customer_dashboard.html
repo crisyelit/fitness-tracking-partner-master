@@ -1,0 +1,219 @@
+{% extends 'base.html' %}
+{% load static %}
+{% block css %}
+<link rel="stylesheet" href="{% static 'assets/css/dashforge.dashboard.css' %}">
+{% endblock css %}
+{% block content %}
+<div class="content content-fixed">
+  <div class="container pd-x-0 pd-lg-x-10 pd-xl-x-0">
+    {% include 'dashboard/components/title.html' %}
+    {% if user.enable_training %}
+    <div class="row">
+      <div class="col-lg-4 mg-t-10 mg-md-t-0 mg-lg-t-10">
+        <div class="row">
+          <div class="col d-flex">
+            <div class="avatar avatar-xxl">
+              {% if user.image %}
+              <img src="{{user.image.url}}" class="rounded" alt="">
+              {% else %}
+              <img src="{% static 'assets/img/default.png' %}" class="rounded" alt="">
+              {% endif %}
+            </div>
+            <div class="p-2">
+              {% if user.get_full_name %}
+              <h5 class="mg-b-2 tx-spacing--1">{{user.get_full_name | capfirst}}</h5>
+              {% else %}
+              <h5 class="mg-b-2 tx-spacing--1">{{user.username | capfirst}}</h5>
+              {% endif %}
+
+              {% if user.is_superuser %}
+              <p class="tx-color-03 mb-0">Vista como: {{user.user_type}}</p>
+              <p class="tx-color-03 mb-0"><a href="{% url 'admin:index' %}">Administrador</a></p>
+              {% else %}
+              <p class="tx-color-03">{{user.user_type}}</p>
+              {% endif %}
+              <div class="d-flex">
+                <a href="{% url 'accounts:profile_edit' %}" class="btn btn-xs btn-white flex-fill">Ver perfil</a>
+                <a href="{% url 'dashboard:training:customer_training_with_you' %}"
+                  class="btn btn-xs btn-primary flex-fill mg-l-10">Entrena ahora</a>
+              </div>
+            </div>
+          </div><!-- col -->
+        </div><!-- row -->
+        <div class="row row-xs">
+          <div class="col-12 col-md-6 col-lg-12">
+            <div class="card card-body" id="weekRoutineProgress">
+              <div class="media d-block d-sm-flex align-items-center">
+                <div class="d-inline-block pos-relative" id="weekRoutineProgressChart">
+                </div>
+                <div class="media-body mg-t-20 mg-sm-t-0 mg-sm-l-20">
+                  <h6 class="mg-b-5 tx-18">Entrena ahora</h6>
+                  <p class="lh-4 tx-12 tx-color-03 mg-b-15">Completaste un <span class="tx-success"
+                      id="weekRoutineProgressSpan"></span> de la
+                    rutina esta semana.</p>
+                  <a href="{% url 'dashboard:training:customer_training_with_you' %}"
+                    class="btn btn-sm btn-white btn-uppercase">¡Entrena ahora!</a>
+                </div><!-- media-body -->
+              </div><!-- media -->
+            </div>
+          </div><!-- col -->
+          <div class="col-12 col-md-6 col-lg-12 mg-t-10 mg-md-t-0 mg-lg-t-10">
+            {% for customer_routine in user.customerOf.active %}
+            <div class="card">
+              <div class="card-header pd-b-0 pd-x-20 bd-b-0">
+                <h6 class="mg-b-0 tx-16">Rutina activa</h6>
+              </div><!-- card-header -->
+              <div class="card-body">
+                <h6 class="tx-16 tx-gray-600">
+                  <a class="tx-gray-600"
+                    href="{% url 'dashboard:training:customer_routine_list' %}?routine={{customer_routine.slug}}">{{customer_routine.routine.name | capfirst}}</a>
+                </h6>
+                <div class="d-flex">
+                  <div class="avatar avatar-md">
+                    {% if customer_routine.routine.user.image %}
+                    <img src="{{customer_routine.routine.user.image.url}}" class="rounded-circle" alt="">
+                    {% else %}
+                    <img src="{% static 'assets/img/default.png' %}" class="rounded-circle" alt="">
+                    {% endif %}
+                  </div>
+                  <div class="media-body mg-l-10">
+                    <h6 class="tx-16 mb-0">
+                      {{customer_routine.routine.user.get_full_name | capfirst}}</h6>
+                    <span class="tx-14">Entrenador</span>
+                  </div><!-- media-body -->
+                </div>
+              </div>
+
+            </div><!-- card -->
+            {% empty %}
+            <div class="card">
+              <div class="card-header">
+                <h6 class="mg-b-0 tx-16">No hay rutina activa</h6>
+              </div><!-- card-header -->
+            </div><!-- card -->
+            {% endfor %}
+
+          </div><!-- col -->
+
+        </div><!-- row -->
+      </div><!-- col -->
+      <div class="col-md-8 mg-t-10">
+        <div class="card" id="weekProgress">
+          <div class="card-header bd-b-0 pd-t-20 pd-lg-t-25 pd-l-20 pd-lg-l-25 d-flex flex-column flex-sm-row align-items-sm-center justify-content-sm-between">
+            <h6 class="mg-b-0 tx-16">Progreso</h6>
+            <!-- <div class="btn-group mg-t-20 mg-sm-t-0">
+              <button class="btn btn-xs btn-white btn-uppercase active">Semana</button>
+              <button class="btn btn-xs btn-white btn-uppercase">Mes</button>
+              <button class="btn btn-xs btn-white btn-uppercase">Año</button>
+            </div> --> <!-- btn-group -->
+          </div><!-- card-header -->
+          <div class="card-body pd-t-25">
+            No hay progreso para mostrar
+          </div><!-- card-body -->
+        </div><!-- card -->
+        <!-- <div class="card mg-t-10">
+          <div class="card-header d-flex justify-content-between">
+            <h6 class="lh-5 mg-b-0">Progreso ejercicios</h6>
+             <nav class="nav nav-row-xs align-items-center">
+              <a href="" class="nav-link">1D</a>
+              <a href="" class="nav-link active">1W</a>
+              <a href="" class="nav-link">1M</a>
+              <a href="" class="nav-link">1Y</a>
+            </nav>
+          </div>
+          <div class="card-body pd-0 pos-relative">
+            <div class="pos-absolute t-20 l-20">
+              <p class="tx-uppercase tx-11 tx-spacing-1 tx-color-03 tx-medium mg-b-0">Total Balance</p>
+              <div class="d-flex align-items-baseline">
+                <h2 class="tx-normal tx-rubik tx-spacing--2 mg-b-0"><small class="tx-color-03">$</small> 7,429.97</h2>
+                <span class="tx-rubik tx-success mg-l-5"><i class="icon ion-md-arrow-up"></i> 60 (2.45%)</span>
+              </div>
+            </div>
+            <div class="chart-fourteen">
+              <div id="flotChart6" class="flot-chart"></div>
+            </div>
+            <ul class="list-group list-group-flush mg-t-15">
+              <li class="list-group-item d-flex align-items-center">
+                <div class="crypto-icon crypto-icon-sm bg-orange">
+                  <i class="cf cf-btc"></i>
+                </div>
+                <div class="mg-l-15">
+                  <h6 class="lh-5 mg-b-0">Bitcoin</h6>
+                  <span class="d-block tx-color-03 tx-uppercase tx-11 tx-medium">btc/usd</span>
+                </div>
+                <div class="mg-l-auto text-right">
+                  <p class="mg-b-0 tx-rubik">0.7200 BTC</p>
+                  <span class="d-block tx-color-03 tx-uppercase tx-11 tx-rubik">$2,907.71 USD</span>
+                </div>
+              </li>
+              <li class="list-group-item d-flex align-items-center">
+                <div class="crypto-icon crypto-icon-sm bg-secondary">
+                  <i class="cf cf-eth"></i>
+                </div>
+                <div class="mg-l-15">
+                  <h6 class="lh-5 mg-b-0">Ethereum</h6>
+                  <span class="d-block tx-color-03 tx-uppercase tx-11 tx-medium">eth/usd</span>
+                </div>
+                <div class="mg-l-auto text-right">
+                  <p class="mg-b-0 tx-rubik">15.0030 ETH</p>
+                  <span class="d-block tx-color-03 tx-uppercase tx-11 tx-rubik">$2,083.62 USD</span>
+                </div>
+              </li>
+              <li class="list-group-item d-flex align-items-center">
+                <div class="crypto-icon crypto-icon-sm bg-litecoin">
+                  <i class="cf cf-ltc"></i>
+                </div>
+                <div class="mg-l-15">
+                  <h6 class="lh-5 mg-b-0">Litecoin</h6>
+                  <span class="d-block tx-color-03 tx-uppercase tx-11 tx-medium">ltc/usd</span>
+                </div>
+                <div class="mg-l-auto text-right">
+                  <p class="mg-b-0 tx-rubik">12.5021 LTC</p>
+                  <span class="d-block tx-color-03 tx-uppercase tx-11 tx-rubik">$748.88 USD</span>
+                </div>
+              </li>
+              <li class="list-group-item d-flex align-items-center">
+                <div class="crypto-icon crypto-icon-sm bg-success">
+                  <i class="cf cf-btc"></i>
+                </div>
+                <div class="mg-l-15">
+                  <h6 class="lh-5 mg-b-0">Bitcoin Cash`</h6>
+                  <span class="d-block tx-color-03 tx-uppercase tx-11 tx-medium">bch/usd</span>
+                </div>
+                <div class="mg-l-auto text-right">
+                  <p class="mg-b-0 tx-rubik">5.8120 BCH</p>
+                  <span class="d-block tx-color-03 tx-uppercase tx-11 tx-rubik">$916.67 USD</span>
+                </div>
+              </li>
+              <li class="list-group-item d-flex align-items-center">
+                <div class="crypto-icon crypto-icon-sm bg-primary">
+                  <i class="cf cf-dash"></i>
+                </div>
+                <div class="mg-l-15">
+                  <h6 class="lh-5 mg-b-0">Dash`</h6>
+                  <span class="d-block tx-color-03 tx-uppercase tx-11 tx-medium">dash/usd</span>
+                </div>
+                <div class="mg-l-auto text-right">
+                  <p class="mg-b-0 tx-rubik">16.5019 DASH</p>
+                  <span class="d-block tx-color-03 tx-uppercase tx-11 tx-rubik">$1,521.97 USD</span>
+                </div>
+              </li>
+            </ul>
+          </div>
+        </div> --> <!-- card -->
+      </div>
+    </div><!-- row -->
+    {% endif %}
+  </div><!-- container -->
+</div><!-- content -->
+
+{% endblock content %}
+{% block js %}
+<script src="{% static 'lib/jquery.flot/jquery.flot.js' %}"></script>
+<script src="{% static 'lib/jquery.flot/jquery.flot.stack.js' %}"></script>
+<script src="{% static 'lib/jquery.flot/jquery.flot.resize.js' %}"></script>
+<script src="{% static 'lib/flot.curvedlines/curvedLines.js' %}"></script>
+<script src="{% static 'lib/peity/jquery.peity.min.js' %}"></script>
+<script src="{% static 'lib/chart.js/Chart.bundle.min.js' %}"></script>
+<script src="{% static 'assets/js/customer_dashboard.js' %}"></script>
+{% endblock js %}

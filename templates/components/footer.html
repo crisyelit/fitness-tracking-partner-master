@@ -1,0 +1,14 @@
+{% load flatpages %}
+{% get_flatpages as flatpages %}
+	<footer class="footer mg-t-auto">
+    	<div>
+    		<span>&copy; 2021 Fitness tracking partner </span>
+    	</div>
+    	<div>
+    		<nav class="nav">
+				{% for page in flatpages %}
+    			<a href="{{ page.url }}" class="nav-link">{{ page.title }}</a>
+				{% endfor %}
+    		</nav>
+    	</div>
+    </footer>

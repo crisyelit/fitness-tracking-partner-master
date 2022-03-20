@@ -1,0 +1,85 @@
+{% extends 'training/coach/base.html' %}
+{% load static custom_tags %}
+{% block body %}
+<div class="filemgr-content-header">
+    <h4 class="mg-b-0">Clientes</h4>
+</div><!-- filemgr-content-header -->
+<div class="filemgr-content-body">
+    <div class="pd-20 pd-lg-25 pd-xl-30">
+        <div class="row">
+            {{block.super}}
+            <div class="col-12">
+                {% for item in object_list %}
+                {% is_active_customer customer=item coach=user as is_active_customer %}
+                {% active_routine customer=item as active_routine %}
+                <div class="card mt-2 customer d-md-flex">
+                    <div class="card-body d-md-flex">
+                        <div class="card-content">
+                            <div class="card-content__header d-flex align-items-center">
+                                <div class="avatar mr-4">
+                                    {% if item.image %}
+                                    <img src="{{item.image.url}}" class="rounded-circle" alt="">
+                                    {% else %}
+                                    <img src="{% static 'assets/img/default.png' %}" class="rounded-circle" alt="">
+                                    {% endif %}
+                                </div>
+                                <div class="d-flex flex-column">
+                                    <h5 class="card-title mb-0">{{item.get_full_name | capfirst}}</h5>
+                                    {% if item.enable_training == False %}
+                                    <span class="text-warning">
+                                        Entrenamiento desactivado
+                                    </span>
+                                    {% endif %}
+                                    {% if is_active_customer %}
+                                    <span class="text-success">
+                                        Cliente activo
+                                    </span>
+                                    {% endif %}
+                                </div>
+                            </div>
+                            <div class="card-content__container bd d-md-flex mt-2">
+                                <div class="p-2"><span class="card-text">Rutinas:
+                                        {{item.customerOf.all.count}}</span></div>
+                                <div class="p-2"><span class="card-text">Rutinas finalizadas:
+                                        {{item.customerOf.completed.count}}</span></div>
+                                <div class="p-2"><span class="card-text">Rutinas canceladas:
+                                        {{item.customerOf.canceled.count}}</span></div>
+
+
+
+                                <div class="p-2">
+                                    {% if is_active_customer %}
+                                    <span class="card-text">
+                                        Rutina activa: <a
+                                            href="{% url 'dashboard:training:routine_detail' slug=active_routine.routine.slug %}"
+                                            class="text-primary">{{active_routine.routine.name | capfirst}}</a>
+                                    </span>
+                                    {% else %}
+                                    <span class="card-text">
+                                        Rutina activa: <span class="text-primary">No hay rutina activa</span>
+                                    </span>
+                                    {% endif %}
+                                </div>
+                            </div>
+                        </div>
+                        {% if is_active_customer == False %}
+                        <div class="actions mt-2 mt-md-0 align-self-center ml-md-auto">
+                            <a href="{% url 'dashboard:training:customer_routine_create' slug=item.public_id %}"
+                                class="card-link text-success tx-12"><i class="far fa-eye"></i> Asignar rutina</a>
+                        </div>
+                        {% else %}
+                        <div class="actions mt-2 mt-md-0 align-self-center ml-md-auto">
+                            <a href="{% url 'dashboard:training:customer_routine_edit' pk=active_routine.pk %}"
+                                class="card-link text-primary tx-12"><i class="far fa-edit"></i> Editar rutina</a>
+                            <a href="{% url 'dashboard:training:customer_routine_cancel' pk=active_routine.pk %}"
+                                class="card-link text-danger tx-12"><i class="far fa-eye"></i> Cancelar rutina</a>
+                        </div>
+                        {% endif %}
+                    </div>
+                </div>
+                {% endfor %}
+            </div>
+        </div>
+    </div>
+</div><!-- filemgr-content-body -->
+{% endblock body %}

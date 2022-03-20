@@ -1,0 +1,17 @@
+{% extends 'training/coach/base.html' %}
+{% load crispy_forms_tags %}
+
+{% block body %}
+<div class="filemgr-content-header">
+    <h4 class="mg-b-0">Eliminar Ejercicio</h4>
+</div><!-- filemgr-content-header -->
+<div class="filemgr-content-body">
+    <div class="pd-20 pd-lg-25 pd-xl-30">
+        <form method="post">{% csrf_token %}
+            <p>¿Seguro que quieres eliminar "{{ object }}"?</p>
+            <input type="submit" value="Confirmar" class="btn btn-primary">
+        </form>
+    </div>
+</div><!-- filemgr-content-body -->
+
+{% endblock body %}

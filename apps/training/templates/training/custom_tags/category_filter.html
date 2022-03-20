@@ -1,0 +1,10 @@
+<div class="filter">
+    <span class="tx-14 tx-bold">Categoría</span>
+    <ul>
+        {% for category in result %}
+        <li>
+            <a href="?category={{category.category__slug}}">{{category.category__name}}</a>
+        </li>
+        {% endfor %}
+    </ul>
+</div>

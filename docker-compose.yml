@@ -1,0 +1,105 @@
+version: "3"
+
+services:
+  db:
+    container_name: fitness_tracking_partner_db
+    image: postgres:13.4
+    environment:
+      POSTGRES_USER: ${PG_USER}
+      POSTGRES_PASSWORD: ${PG_PASSWORD}
+      POSTGRES_DB: ${PG_NAME}
+      PGDATA: /var/lib/postgresql/data/pgdata
+    env_file:
+      - ./.env
+    ports:
+      - "5432:5432"
+    volumes:
+      - ./data:/var/lib/postgresql/data
+    networks:
+      - fitness_tracking_partner-network
+
+  redis:
+    container_name: fitness_tracking_partner_redis
+    image: redis:latest
+    command: redis-server --requirepass ${REDIS_PASSWORD}
+    ports:
+      - "${REDIS_PORT}:${REDIS_PORT}"
+    networks:
+      - fitness_tracking_partner-network
+
+  es:
+    container_name: fitness_tracking_partner_es
+    image: elasticsearch:7.14.2
+    environment:
+      - discovery.type=single-node
+    ports:
+      - "9200:9200"
+    networks:
+      - fitness_tracking_partner-network
+
+  web:
+    container_name: fitness_tracking_partner_web
+    build: .
+    volumes:
+      - .:/code
+      - ./static-root:/static-root
+      - ./media-root:/media-root
+    command: sh -c "python manage.py runserver 0.0.0.0:8000"
+    ports:
+      - "8000:8000"
+    env_file:
+      - .env
+    depends_on:
+      - db
+      - redis
+      - mailhog
+      - es
+    image: fitness_tracking_partner-image
+    networks:
+      - fitness_tracking_partner-network
+
+  # celery:
+  #   image: fitness_tracking_partner-image
+  #   container_name: fitness_tracking_partner_celery
+  #   command: sh -c "./wait-for-it.sh db -- celery -A app worker -l info"
+  #   volumes:
+  #     - .:/code
+  #   env_file:
+  #     - ./.env
+  #   depends_on:
+  #     - db
+  #     - redis
+  #     - mailhog
+  #   networks:
+  #     - fitness_tracking_partner-network
+
+  # celery-beat:
+  #   image: fitness_tracking_partner-image
+  #   container_name: fitness_tracking_partner_celery_beat
+  #   command: sh -c "./wait-for-it.sh db -- celery -A app beat -l info --scheduler django_celery_beat.schedulers:DatabaseScheduler"
+  #   volumes:
+  #     - .:/code
+  #   env_file:
+  #     - ./.env
+  #   depends_on:
+  #     - db
+  #     - redis
+  #     - mailhog
+  #   networks:
+  #     - fitness_tracking_partner-network
+
+  mailhog:
+    container_name: fitness_tracking_partner_mail
+    image: mailhog/mailhog
+    ports:
+      - 1025:1025 # smtp server
+      - 8025:8025 # web ui. Visit http://localhost:8025/ to check emails
+    networks:
+      - fitness_tracking_partner-network
+
+networks:
+  fitness_tracking_partner-network:
+    driver: bridge
+
+volumes:
+  postgres_data:

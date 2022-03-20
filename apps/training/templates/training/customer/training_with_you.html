@@ -1,0 +1,180 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block content %}
+<div class="content content-fixed">
+    <div class="container pd-x-0 pd-lg-x-10 pd-xl-x-0">
+        <div class="d-sm-flex align-items-center justify-content-between mg-b-20 mg-lg-b-25 mg-xl-b-30">
+            <div>
+                <nav aria-label="breadcrumb">
+                    <ol class="breadcrumb breadcrumb-style1 mg-b-10">
+                        <li class="breadcrumb-item"><a href="{% url 'dashboard:index' %}">Escritorio</a></li>
+                        <li class="breadcrumb-item active" aria-current="page">Entrenamiento contigo</li>
+                    </ol>
+                </nav>
+            </div>
+        </div>
+        <div class="row customer-routine">
+            <div class="col-12 col-lg-9 customer-routine-content">
+                {% if customer_routine %}
+
+                {% if day_progress.code == "COMPLETED" %}
+                <div class="row mb-2">
+                    <div class="col-12">
+                        <div class="alert alert-success" role="alert">
+                            <h4 class="alert-heading">{{day_progress.message}}</h4>
+                            <a href="{% url 'dashboard:index' %}">Volver al resumen</a>
+                        </div>
+                    </div>
+                </div>
+                {% endif %}
+
+                <div class="row">
+                    <div class="col-12 d-flex justify-content-between align-items-center">
+                        <div class="d-flex align-items-center">
+                            <button id="leftSidebarOpen" class="d-lg-none btn btn-open tx-16"><i
+                                    class="fas fa-ellipsis-v"></i></button>
+
+                            <h4 class="mb-0">{{progress.day.name | capfirst}} {% if progress.day.day %}<span
+                                    class="text-muted">{{progress.day.day | capfirst}}</span>{% endif %} -
+                                {{progress.current_exercise.exercise.name | capfirst}}</h4>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="row">
+                    <div class="col-12">
+                        <div class="card mt-2 d-md-flex">
+
+                            {% if progress.current_exercise.exercise.video %}
+                            <video src="{{progress.current_exercise.exercise.video.url}}" controls>
+                            </video>
+                            {% elif progress.current_exercise.exercise.image %}
+
+                            <img src="{{progress.current_exercise.exercise.image.url}}" class="card-img-top" alt="...">
+                            {% endif %}
+                        </div>
+                    </div>
+                    <div class="col-12">
+                        <div class="card mt-2 d-md-flex">
+                            <div class="card-header d-flex justify-content-between align-items-center p-2">
+                                <h4 class="card-title m-0">Detalles</h4>
+                                <a class="tx-22" data-toggle="collapse" href="#detailsCollapse" role="button"
+                                    aria-expanded="false" aria-controls="detailsCollapse">
+                                    <i class="fas fa-info-circle"></i>
+                                </a>
+                            </div>
+                            <div class="card-body bg-gray-100 p-2">
+                                <div class="row">
+                                    <div class="col-12 col-lg-3">
+                                        <label
+                                            class="tx-10 tx-medium tx-spacing-1 tx-color-03 tx-uppercase tx-sans mg-b-10">Series</label>
+                                        {% if progress.current_exercise.cycles %}
+                                        <p class="mg-b-0 tx-18 tx-bold">{{progress.current_exercise.cycles}}</p>
+                                        {% else %}
+                                        <p class="mg-b-0"> --- </p>
+                                        {% endif %}
+                                    </div><!-- col -->
+                                    <div class="col-12 col-lg-3">
+                                        <label
+                                            class="tx-10 tx-medium tx-spacing-1 tx-color-03 tx-uppercase tx-sans mg-b-10">Repeticiones</label>
+                                        {% if progress.current_exercise.repetitions %}
+                                        <p class="mg-b-0 tx-18 tx-bold">{{progress.current_exercise.repetitions}}</p>
+                                        {% else %}
+                                        <p class="mg-b-0"> --- </p>
+                                        {% endif %}
+                                    </div><!-- col -->
+                                    <div class="col-12 col-lg-3">
+                                        <label
+                                            class="tx-10 tx-medium tx-spacing-1 tx-color-03 tx-uppercase tx-sans mg-b-10">Duración
+                                            (Segundos)</label>
+
+                                        {% if progress.current_exercise.duration %}
+                                        <p class="mg-b-0 tx-18 tx-bold">{{progress.current_exercise.duration}}</p>
+                                        {% else %}
+                                        <p class="mg-b-0"> --- </p>
+                                        {% endif %}
+
+                                    </div><!-- col -->
+                                    <div class="col-12 col-lg-3">
+                                        <label
+                                            class="tx-10 tx-medium tx-spacing-1 tx-color-03 tx-uppercase tx-sans mg-b-10">Descanso
+                                            (Segundos)</label>
+                                        {% if progress.current_exercise.rest %}
+                                        <p class="mg-b-0 tx-18 tx-bold">{{progress.current_exercise.rest}}</p>
+                                        {% else %}
+                                        <p class="mg-b-0"> --- </p>
+                                        {% endif %}
+                                    </div><!-- col -->
+                                </div><!-- row -->
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-12 collapse" id="detailsCollapse">
+                        <div class="card mt-2 d-md-flex">
+                            <div class="card-body p-2">
+                                <h5>Descripción</h5>
+                                {{progress.current_exercise.exercise.description|linebreaks}}
+                                <h5>Recursos</h5>
+                                <div>
+                                    {% for resource in progress.current_exercise.exercise.resources.all %}
+                                    <span class="badge badge-primary">{{resource.name | capfirst}}</span>
+                                    {% endfor %}
+                                </div>
+                                <h5>Advertencias</h5>
+                                {{progress.current_exercise.exercise.warnings|linebreaks}}
+                                <h5>Musculos</h5>
+                                <div>
+                                    {% for muscle in progress.current_exercise.exercise.muscles.all %}
+                                    <span class="badge badge-primary">{{muscle.name | capfirst}}</span>
+                                    {% endfor %}
+                                </div>
+                                <h5>tags</h5>
+                                <div>
+                                    {% for tag in progress.current_exercise.exercise.tags.all %}
+                                    <span class="badge badge-primary">{{tag.tag | capfirst}}</span>
+                                    {% endfor %}
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                </div>
+                {% else %}
+                <div class="row">
+                    <div class="col-12">
+                        <div class="alert alert-danger" role="alert">
+                            <h4 class="alert-heading">{{message}}</h4>
+                            {% if code == 'CUSTOMER_ROUTINE_DOES_NOT_EXIST' %}
+                            <p>No hay rutinas activa. Puedes empezar <a
+                                    href="{% url 'dashboard:training:customer_routine_list' %}">activando
+                                    una rutina</a></p>
+                            {% endif %}
+                        </div>
+                    </div>
+                </div>
+                {% endif %}
+            </div>
+            {% include 'training/components/training_with_you_sidebar.html' %}
+        </div>
+    </div><!-- container -->
+</div><!-- content -->
+
+
+{% include 'training/components/training_with_you_bottom_action.html' %}
+
+{% endblock content %}
+
+{% block js %}
+
+<script src="{% static 'lib/countdown/dist/jquery.countdown360.min.js' %}"></script>
+<script src="{% static 'assets/js/customer_routine.js' %}"></script>
+<script src="{% static 'assets/js/training_with_you.js' %}"></script>
+
+<script>
+    $('.accordion').accordion({
+        heightStyle: 'content'
+    });
+
+</script>
+{% endblock js %}

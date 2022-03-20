@@ -1,0 +1,1 @@
+- Obtener categorias y guardar para generar slugs

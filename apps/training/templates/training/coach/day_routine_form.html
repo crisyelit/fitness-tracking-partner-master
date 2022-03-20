@@ -1,0 +1,30 @@
+{% extends 'training/coach/base.html' %}
+{% load crispy_forms_tags %}
+
+{% block body %}
+<div class="filemgr-content-header">
+    {% if object %}
+        <h4 class="mg-b-0">Editar {{object.name | capfirst}}</h4>
+    {% else %}
+        <h4 class="mg-b-0">Nuevo dia</h4>
+    {% endif %}
+</div><!-- filemgr-content-header -->
+<div class="filemgr-content-body">
+    <div class="pd-20 pd-lg-25 pd-xl-30">
+        <form method="post">
+            {% crispy form form_helper %}
+
+            {% crispy formset formset_helper %}
+
+            <div class="d-flex justify-content-center bg-gray-100 bd rounded-5 mb-2 p-2">
+                <button id="add_button" class="btn btn-secondary">Agregar Ejercicio</button>
+            </div>
+            
+            <div class="form-actions">
+                <input type="submit" name="submit" value="Guardar" class="btn btn-primary" id="submit-save">
+            </div>
+        </form>
+    </div>
+</div><!-- filemgr-content-body -->
+
+{% endblock body %}

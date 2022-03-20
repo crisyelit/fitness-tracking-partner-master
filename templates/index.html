@@ -1,0 +1,23 @@
+{% extends 'base.html' %} 
+{% load static %}
+{% block css %}
+<link rel="stylesheet" href="{% static 'assets/css/dashforge.landing.css' %}">
+{% endblock css %}
+
+{% block content %}
+<div class="home-slider">
+  <div class="home-lead">
+    <h1>Fitness tracking partner</h1>
+    <p class="home-text">Lorem ipsum dolor sit amet consectetur adipisicing elit.</p>
+
+    <h6 class="home-headline">Lorem ipsum dolor sit amet consectetur, adipisicing elit. Fugiat aspernatur reiciendis voluptatum labore cupiditate magni numquam commodi sint.</h6>
+
+    <div class="d-flex wd-lg-350">
+      <a href="{% url 'accounts:login' %}" class="btn btn-white btn-uppercase flex-fill mg-l-10">¡Empieza ahora!</a>
+    </div>
+
+  </div>
+  <div class="home-slider-bg-one"></div>
+</div><!-- home-slider -->
+
+{% endblock content %}

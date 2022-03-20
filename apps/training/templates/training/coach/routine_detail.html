@@ -1,0 +1,58 @@
+{% extends 'training/coach/base.html' %}
+{% load static %}
+{% block body %}
+<div class="filemgr-content-header">
+    <h4 class="mg-b-0">{{object.name | capfirst}}</h4>
+    <nav class="nav d-sm-flex mg-l-auto">
+        <a href="{% url 'dashboard:training:routine_update' slug=object.slug %}" class="btn btn-primary mr-2 btn-sm">Editar</a>
+        <a href="{% url 'dashboard:training:day_routine_create' slug=object.slug %}"
+            class="btn btn-success btn-sm">Agregar días</a>
+    </nav>
+</div><!-- filemgr-content-header -->
+<div class="filemgr-content-body">
+    <div class="pd-20 pd-lg-25 pd-xl-30">
+        <div class="row">
+            <div class="col-12">
+                <div class="card mt-2">
+                    <div class="card-body">
+                        <p class="card-text">{{object.description}}</p>
+                    </div>
+                </div>
+            </div>
+
+            <div class="col-12 mt-4">
+                <h5 class="tx-gray-600">Días</h5>
+            </div>
+            {% for day in object.dayroutine_set.all %}
+            <div class="col-12">
+                <div class="card mt-2 customer d-md-flex">
+                    <div class="card-body d-md-flex">
+                        <div class="card-content">
+                            <h5 class="card-title mb-0">{{day.name | capfirst}}</h5>
+                        </div>
+                        <div class="actions mt-2 mt-md-0 align-self-center ml-md-auto">
+                            <a href="{% url 'dashboard:training:day_routine_update' slug=object.slug public_id=day.slug %}" class="card-link"><i data-feather="edit"></i>Editar</a>
+                            <a href="" class="card-link text-danger"><i data-feather="trash"></i>Eliminar</a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            {% empty %}
+            <div class="col-12">
+                <div class="card mt-2 customer d-md-flex">
+                    <div class="card-body d-md-flex">
+                        <div class="card-content">
+                            <div class="card-content__header d-flex align-items-center">
+                                <p class="card-text">No hay días agregados para esta rutina. Puedes empezar <a
+                                        href="{% url 'dashboard:training:day_routine_create' slug=object.slug %}">agregando
+                                        un día</a> para esta rutina</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            {% endfor %}
+        </div>
+    </div>
+</div><!-- filemgr-content-body -->
+{% endblock body %}

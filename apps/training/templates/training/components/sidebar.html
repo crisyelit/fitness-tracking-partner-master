@@ -1,0 +1,12 @@
+    <div class="filemgr-sidebar">
+        <div class="filemgr-sidebar-body">
+            <div class="pd-t-20 pd-b-10 pd-x-10">
+                <nav class="nav nav-sidebar tx-13">
+                    <a href="{% url 'dashboard:training:routine_list' %}"
+                        class="nav-link {% if request.resolver_match.url_name == 'routine_list' %}active{% endif %}"><span>Rutinas</span></a>
+                    <a href="{% url 'dashboard:training:exercise_list' %}" 
+                        class="nav-link {% if request.resolver_match.url_name == 'exercise_list' %}active{% endif %}"><span>Ejercicios</span></a>
+                </nav>
+            </div>
+        </div><!-- filemgr-sidebar-body -->
+    </div><!-- filemgr-sidebar -->

@@ -1,0 +1,73 @@
+{% extends 'training/coach/base.html' %}
+{% load static custom_tags crispy_forms_tags %}
+{% block body %}
+{% include 'training/components/filter_mobile_sidebar.html' %}
+<div class="filemgr-content-header">
+    <button id="openFilterSidebar" class="d-lg-none btn btn-open tx-16"><i class="fas fa-filter"></i></button>
+    <h4 class="mg-b-0">Ejercicios</h4>
+    <nav class="nav d-sm-flex mg-l-auto">
+        <a href="{% url 'dashboard:training:exercise_create' %}" class="btn btn-primary btn-sm">Agregar ejercicio</a>
+    </nav>
+</div><!-- filemgr-content-header -->
+<div class="filemgr-content-body">
+    <div class="pd-20 pd-lg-25 pd-xl-30">
+        <div class="row">
+            <div class="col-12 col-lg-9">
+                {% for item in filter.qs %}
+                <div class="row-sm">
+                    <div class="card customer d-md-flex mb-2">
+                        <div class="card-body d-md-flex">
+                            <div class="card-content">
+                                <div class="card-content__header d-flex align-items-center">
+                                    <div class="avatar mr-2">
+                                        {% if item.image %}
+                                        <img src="{{item.image.url}}" class="rounded" alt="">
+                                        {% else %}
+                                        <img src="{% static 'assets/img/placehold.jpg' %}" class="rounded" alt="">
+                                        {% endif %}
+                                    </div>
+                                    <h5 class="card-title mb-0">{{item.name | capfirst}}</h5>
+                                </div>
+                            </div>
+                            <div class="actions mt-2 mt-md-0 align-self-center ml-md-auto">
+                                <a href="{% url 'dashboard:training:exercise_update' slug=item.slug %}"
+                                    class="card-link tx-12"><i class="fas fa-edit"></i>Editar</a>
+                                <a href="{% url 'dashboard:training:exercise_delete' slug=item.slug %}"
+                                    class="card-link text-danger tx-12"><i class="fas fa-trash-alt"></i>Eliminar</a>
+                            </div>
+                        </div>
+                    </div>
+
+                </div>
+                {% endfor %}
+            </div>
+            <div class="d-none d-lg-block col-lg-3">
+                <div class="filter card">
+                    <div class="card-header">
+                        <h6 class="card-title"><i class="fas fa-filter"></i> Filtros</h6>
+                    </div>
+                    <div class="card-body d-flex flex-column">
+                        <form method="get">
+                            {{ filter_form|crispy }}
+                            <input type="submit" />
+                        </form>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div><!-- filemgr-content-body -->
+{% endblock body %}
+{% block js %}
+{{block.super}}
+
+<script>
+    $('#openFilterSidebar').click(function () {
+        $('#filterSidebar').removeClass('close').addClass('active');
+    });
+
+    $('#closeFilterSidebar').click(function () {
+        $('#filterSidebar').removeClass('active').addClass('close');
+    });
+</script>
+{% endblock js %}
